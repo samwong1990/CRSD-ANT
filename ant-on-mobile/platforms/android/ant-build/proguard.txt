@@ -1,0 +1,3 @@
+# view AndroidManifest.xml #generated:6
+-keep class hk.samwong.ant.Ant { <init>(...); }
+
