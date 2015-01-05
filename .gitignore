@@ -51,3 +51,9 @@ IOS/www/
 # Files that might appear on external disk
 .Spotlight-V100
 .Trashes
+
+# elm-lang generated files
+elm-stuff/
+
+# ignore all cordova generated code (Assumes we'll not be doing platform specific stuff)
+platforms/
