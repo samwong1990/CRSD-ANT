@@ -23,7 +23,7 @@ module.exports = function (grunt) {
         watch: {
             scripts: {
                 files: ['www/elm/*.elm', 'www/js/**/*.js', 'www/css/**/*.css', 'www/index.tpl.html'],
-                tasks: ['compileElm', 'includeSource'],
+                tasks: ['shell:compileElm', 'includeSource', 'shell:runCordovaBrowser'],
                 options: {
                     spawn: false,
                     interrupt: true,
@@ -33,7 +33,7 @@ module.exports = function (grunt) {
         },
         shell: {
             compileElm: {
-                command: 'cd www && elm-make elm/*.elm',
+                command: 'cd www && elm-make elm/*.elm --output=js/elm.js',
             },
             runTestServer: {                                // Task
                 command: 'npm test',
@@ -52,6 +52,6 @@ module.exports = function (grunt) {
     });
 
     // Default task(s).
-    grunt.registerTask('default', ['shell:runTestServer', 'shell:runCordovaBrowser', 'watch']);
+    grunt.registerTask('default', ['includeSource', 'shell:runTestServer', 'shell:runCordovaBrowser', 'watch']);
 
 };
