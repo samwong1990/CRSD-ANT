@@ -33,7 +33,7 @@ module.exports = function (grunt) {
         },
         shell: {
             compileElm: {
-                command: 'cd www && elm-make elm/*.elm --output=js/elm.js',
+                command: 'cd www && elm-make elm/*.elm --output=js/prioritized/elm.js',
             },
             runTestServer: {                                // Task
                 command: 'npm test',

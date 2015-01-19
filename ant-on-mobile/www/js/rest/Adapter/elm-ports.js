@@ -2,13 +2,6 @@
  * My code will be in elm-lang, and reuse CRSD code through ports (see ports in elm)
  */
 var adapter = Elm.worker(Elm.Adapter, { input: "" });
-document.onkeydown = function(e){
-if (e.keyCode == 37) {
-        console.log("You pressed Left");
-    } else if (e.keyCode == 39) {
-        console.log("You pressed Right");
-    }
-};
 
 function triggerKeyboardEvent(el, keyCode)
 {
