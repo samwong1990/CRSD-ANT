@@ -16,7 +16,7 @@ var targetWidth;
 var targetHeight;
 var spacing;
 
-var viewStack = new Array();
+var viewStack = [];
 
 var setupData = [];
 var resultsData = [];

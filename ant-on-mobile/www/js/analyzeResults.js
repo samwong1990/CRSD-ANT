@@ -58,7 +58,7 @@ function generateSummary(userInfo, results) {
 
 	var summary = [];
 	//The first row is the headers
-	summary[0] = ['uniqueID','studyID','ANTversion','targFile','ANTdate','ANTtime','SessionDur','Session','Age','Sex','Group','ANT.N','med.all','mean.all','sd.all','min.all','max.all','alert','orient','conflict','pc.all','e.all','nocue','double','centre','spatial','cong','incong','med.C1T1','med.C1T2','med.C2T1','med.C2T2','med.C3T1','med.C3T2','med.C4T1','med.C4T2','mean.C1T1','mean.C1T2','mean.C2T1','mean.C2T2','mean.C3T1','mean.C3T2','mean.C4T1','mean.C4T2','e.nocue','e.double','e.centre','e.spatial','e.incong','e.cong','pc.C1T1','pc.C1T2','pc.C2T1','pc.C2T2','pc.C3T1','pc.C3T2','pc.C4T1','pc.C4T2']
+	summary[0] = ['uniqueID','studyID','ANTversion','targFile','ANTdate','ANTtime','SessionDur','Session','Age','Sex','Group','ANT.N','med.all','mean.all','sd.all','min.all','max.all','alert','orient','conflict','pc.all','e.all','nocue','double','centre','spatial','cong','incong','med.C1T1','med.C1T2','med.C2T1','med.C2T2','med.C3T1','med.C3T2','med.C4T1','med.C4T2','mean.C1T1','mean.C1T2','mean.C2T1','mean.C2T2','mean.C3T1','mean.C3T2','mean.C4T1','mean.C4T2','e.nocue','e.double','e.centre','e.spatial','e.incong','e.cong','pc.C1T1','pc.C1T2','pc.C2T1','pc.C2T2','pc.C3T1','pc.C3T2','pc.C4T1','pc.C4T2'];
 	summary[1] = [];
 	summary[1][0] = userInfo[0];							//userID
 	summary[1][1] = userInfo[4];							//studyID
@@ -72,7 +72,7 @@ function generateSummary(userInfo, results) {
 	summary[1][8] = userInfo[1];							//Age
 	summary[1][9] = userInfo[2];							//Sex
 	summary[1][10] = userInfo[5];							//Group
-	summary[1][11] = allResults.length						//ANT.N
+	summary[1][11] = allResults.length;						//ANT.N
 	summary[1][12] = median(allCorrectRT);					//med.all
 	summary[1][13] = mean(allCorrectRT);					//mean.all
 	summary[1][14] = (Math.round((standardDeviation(allCorrectRT))*100))/100;		//sd.all
