@@ -16,8 +16,6 @@ function startTest(blockNumber, inputTrialSet) {
 	trialResults = [];						//We'll keep our results in this array
 	practiceFeedbackUP = document.getElementById('practiceFeedbackUP');
 	practiceFeedbackDOWN = document.getElementById('practiceFeedbackDOWN');
-	iPadLeft = 	document.getElementById('iPadLeft');
-	iPadRight = document.getElementById('iPadRight');
 	
 	//Setup the test in random order
 	for (trialIndex=currentTrial; trialIndex<(trialCount+currentTrial); trialIndex++) {
@@ -35,7 +33,15 @@ function startTest(blockNumber, inputTrialSet) {
 		pushView('cueType10');
 	}
 	pushView('blankView');
+	setSoftKeysVisibility(true);
 	startTrial();							//Start the first trial
+}
+
+function setSoftKeysVisibility(isVisible) {
+	elements = document.getElementsByClassName("softkey");
+	for (var i = 0; i < elements.length; i++) {
+		elements[i].style.visibility = isVisible ? 'visible' : 'hidden';
+	}
 }
 
 function startTrial() {
@@ -153,6 +159,7 @@ function earlyEnd(e) {
 			testBlock = 4;
 		}
 		//End test/trial
+		setSoftKeysVisibility(false);
 		endTest();
 	}
 

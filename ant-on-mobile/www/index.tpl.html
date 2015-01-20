@@ -3,22 +3,22 @@
 <head>
     <title>ANT</title>
     <!-- include: "type": "css", "files": "css/**/*.css" -->
-    <!-- include: "ordering": "top-down", "type": "js", "files": "config/**/*.js" -->
     <!-- include: "ordering": "top-down", "type": "js", "files": "js/**/*.js" -->
 </head>
 <body onload="onLoad();">
     <div class="mainAreaWrapper">
-        <button class="leftButton virtualKey" onclick="adapter.ports.input.send('L');">L</button>
+        <button class="leftButton softkey" style="visibility:hidden" onclick="adapter.ports.input.send('L');">
+            <img src="images/targets/ArrowLeft.png" class="target arrow_on_softkey" />
+        </button>
 
 
         <div id="content">
             <div id="formInput" class="instructionsPage">
-                <center>
-                <br />
-                <img src="images/Logo.png" id='logo' width="25%"/>
-                <h4>This testing utility is designed for use with Firefox.</h4>
-                <p id="browserWarning">Other browsers are UNSUPPORTED but may work.  Internet Explorer will yield INACCURATE results and is NOT recommended.</p>
-                <p>Please enter the following information:</p>
+                <h1>Attention Network Test</h1>
+
+                <p>You can try the test by clicking next. Optionally, you can fill in the form below.</p>
+                <p>These information will appear in the csv file at the end.</p>
+
                 </center>
                 <form name="form" id="form">
                     <label>ID:</label>
@@ -73,9 +73,6 @@
                     </select>
                     <br />
                 </form>
-                <center>
-                <p id="fullscreenNote">For best experience, use fullscreen (<span class='fullscreenKey'>F11</span>)</p>
-                </center>
                 <button class="previousButton" onclick="document.form.reset();">Clear</button>
                 <button class="nextButton" onclick="submitForm();">Next</button>
     <!--            <input id="nextButton" class="nextButton" type="button" name="next" value="Next" onclick="submitForm();" />-->
@@ -89,8 +86,8 @@
                 </center>
                 <p>You must pay attention to the <b><i>CENTRAL</i></b> <span class='targetTypeRef'>target</span>, and indicate which way it is pointing by pressing the LEFT or RIGHT arrow keys on the keyboard.
                 </p>
-                <input class="previousButton" type="button" name="previous" value="Previous" onclick="popView();" />
-                <input class="nextButton" type="button" name="next" value="Next" onclick="pushView('instructionPage2');" />
+                <button class="previousButton" onclick="popView();">Previous</button>
+                <button class="nextButton" onclick="pushView('instructionPage2');">Next</button>
             </div>
 
             <div id="instructionPage2" class="instructionsPage" style="visibility:hidden">
@@ -125,24 +122,24 @@
                     </table>
                 </center>
                 <p>Please try to keep your eyes fixed on the cross during the test, rather than moving them to look at the <u><span class='targetTypeRef'>target</span>s</u>.</p>
-                <input class="previousButton" type="button" name="previous" value="Previous" onclick="popView();" />
-                <input class="nextButton" type="button" name="next" value="Next" onclick="pushView('instructionPage3');" />
+                <button class="previousButton" onclick="popView();">Previous</button>
+                <button class="nextButton" onclick="pushView('instructionPage3');">Next</button>
             </div>
 
             <div id="instructionPage3" class="instructionsPage" style="visibility:hidden">
                 <p>Sometimes, one or more asterisks <img src="images/star.png" class="cue imageintext" /> will appear shortly before the <span class='targetTypeRef'>target</span>s.</p>
                 <p>When they are presented, the asterisks always appear exactly one half second before the <span class='targetTypeRef'>target</span>s.</p>
                 <p>If only one asterisk appears, and it is above or below the cross, it also tells you the location in which the <span class='targetTypeRef'>target</span>s will appear.</p>
-                <input class="previousButton" type="button" name="previous" value="Previous" onclick="popView();" />
-                <input class="nextButton" type="button" name="next" value="Next" onclick="pushView('instructionPage4');" />
+                <button class="previousButton" onclick="popView();">Previous</button>
+                <button class="nextButton" onclick="pushView('instructionPage4');">Next</button>
             </div>
 
             <div id="instructionPage4" class="instructionsPage" style="visibility:hidden">
                 <p>As mentioned earlier, you must pay attention to the central <span class='targetTypeRef'>target</span>, and indicate which way it is pointing by pressing the LEFT or RIGHT arrow keys on the keyboard.</p>
                 <p>This test measures both your reaction time and your accuracy, so it is important to respond as quickly as you can, but without making too many errors.</p>
                 <p>To facilitate quick responding, keep your left and right index fingers over the LEFT and RIGHT arrow keys respectively.</p>
-                <input class="previousButton" type="button" name="previous" value="Previous" onclick="popView();" />
-                <input class="nextButton" type="button" name="next" value="Next" onclick="pushView('instructionPage5');" />
+                <button class="previousButton" onclick="popView();">Previous</button>
+                <button class="nextButton" onclick="pushView('instructionPage5');">Next</button>
             </div>
 
             <div id="instructionPage5" class="instructionsPage" style="visibility:hidden">
@@ -151,8 +148,8 @@
                 <p>If you make a mistake during the practice block, an error message will appear.  If no error message appears, you will know that you responded correctly.</p>
                 <p>No feedback is given during the 2 test blocks.</p>
                 <p>Please tell the test supervisor if you are ready to begin.</p>
-                <input class="previousButton" type="button" name="previous" value="Previous" onclick="popView();" />
-                <input class="nextButton" type="button" name="next" value="Next" onclick="areYouReady();" />
+                <button class="previousButton" onclick="popView();">Previous</button>
+                <button class="nextButton" onclick="areYouReady();">Next</button>
             </div>
             <div id="testPageContainer" style="visibility:hidden">
                 <div id="testPage" style="visibility:hidden">
@@ -335,7 +332,9 @@
             </div>
         </div>
 
-        <button class="rightButton virtualKey" onclick="adapter.ports.input.send('R')">R</button>
+        <button class="rightButton softkey" style="visibility: hidden" onclick="adapter.ports.input.send('R')">
+            <img src="images/targets/ArrowRight.png" class="target arrow_on_softkey" />
+        </button>
     </div>
     <div id="attribution">
         <a href="http://idaios.com/"><img src="images/idaios.png" id="idaioslogo" /></a>

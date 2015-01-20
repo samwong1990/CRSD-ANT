@@ -3,21 +3,6 @@ body {
 	font-family: sans-serif;
 }
 
-.leftButton {
-	left: 0;
-}
-
-.rightButton {
-	right: 0;
-}
-
-.virtualKey {
-	position: fixed;
-	top: 0px;
-	height: 100%;
-	width: 10%;
-}
-
 #content {
 	position: fixed;
 	margin: 0 auto 0 auto;
