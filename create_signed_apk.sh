@@ -8,3 +8,4 @@ rm -rf Ant-release-signed.apk
 zipalign -v 4 Ant-release-unsigned.apk Ant-release-signed.apk
 
 echo "Make sure you have incremented the version number or Google Play Store will reject it"
+echo "The config is at CRSD-ANT/ant-on-mobile/config.xml"
