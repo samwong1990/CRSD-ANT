@@ -1,4 +1,7 @@
 function formatDate(inputDate) {
+    if(typeof(inputDate) === "string"){
+        inputDate = new Date(Date.parse(inputDate))
+    }
 	outputString = pad(inputDate.getDate(),2)+'-';
 	outputString += abbreviatedNameOfMonth(inputDate.getMonth())+'-';
 	outputString += inputDate.getFullYear();
@@ -6,6 +9,9 @@ function formatDate(inputDate) {
 }
 
 function formatTime(inputDate) {
+    if(typeof(inputDate) === "string"){
+        inputDate = new Date(Date.parse(inputDate))
+    }
 	return (pad(inputDate.getHours(),2)+':'+pad(inputDate.getMinutes(),2)+':'+pad(inputDate.getSeconds(),2));
 }
 

@@ -16,7 +16,27 @@ function triggerKeyboardEvent(el, keyCode)
   eventObj.which = keyCode;
 
   el.dispatchEvent ? el.dispatchEvent(eventObj) : el.fireEvent("onkeydown", eventObj);
+}
 
+function getPastTrials(){
+    return pastTrials = JSON.parse(window.localStorage.getItem("pastTrials")) || [];
+}
+
+function appendTrial(trial){
+    trial.createdAt = (new Date()).toISOString();
+    var pastTrials = getPastTrials();
+    pastTrials.push(trial);
+    window.localStorage.setItem("pastTrials", JSON.stringify(pastTrials));
+}
+
+function saveTrial(setupData, data){
+    var summary = generateSummary(setupData,data);
+    var rawData = generateData(setupData,data);
+    var trial = {
+        summary: summary,
+        rawData: rawData
+    };
+    appendTrial(trial);
 }
 
 adapter.ports.triggerEvent.subscribe(function(eventName) {
