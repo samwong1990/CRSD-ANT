@@ -19,168 +19,62 @@
     under the License.
 */
 
-var exec = require('cordova/exec');
+var EmailComposer = function () {
 
-/**
- * List of all registered mail app aliases.
- */
-exports.aliases = {
-    gmail: 'com.google.android.gm'
 };
 
-/**
- * List of all available options with their default value.
- *
- * @return {Object}
- */
-exports.getDefaults = function () {
-    return {
-        app:         undefined,
-        subject:     '',
-        body:        '',
-        to:          [],
-        cc:          [],
-        bcc:         [],
-        attachments: [],
-        isHtml:      true
-    };
-};
+EmailComposer.prototype = {
+    /**
+     * Öffnet den Email-Kontroller mit vorausgefüllten Daten.
+     *
+     * @param {Object?} options
+     */
+    open: function (options) {
+        var callbackFn = null,
+            options    = options || {};
 
-/**
- * Verifies if sending emails is supported on the device.
- *
- * @param {Function} callback
- *      A callback function to be called with the result
- * @param {Object} scope
- *      The scope of the callback
- */
-exports.isAvailable = function (callback, scope) {
-    var fn = this.createCallbackFn(callback, scope);
-
-    exec(fn, null, 'EmailComposer', 'isAvailable', []);
-};
-
-/**
- * Displays the email composer pre-filled with data.
- *
- * @param {Object} options
- *      Different properties of the email like the body, subject
- * @param {Function} callback
- *      A callback function to be called with the result
- * @param {Object?} scope
- *      The scope of the callback
- */
-exports.open = function (options, callback, scope) {
-    var fn = this.createCallbackFn(callback, scope);
-
-    options = this.mergeWithDefaults(options || {});
-
-    exec(fn, null, 'EmailComposer', 'open', [options]);
-};
-
-/**
- * Adds a new mail app alias.
- *
- * @param {String} alias
- *      The alias name
- * @param {String} package
- *      The package name
- */
-exports.addAlias = function (alias, package) {
-    this.aliases[alias] = package;
-}
-
-/**
- * @depreacted
- */
-exports.isServiceAvailable = function () {
-    console.log('`email.isServiceAvailable` is deprecated.' +
-                ' Please use `email.isAvailable` instead.');
-
-    this.isAvailable.apply(this, arguments);
-};
-
-/**
- * Alias für `open()`.
- */
-exports.openDraft = function () {
-    this.open.apply(this, arguments);
-};
-
-/**
- * @private
- *
- * Merge settings with default values.
- *
- * @param {Object} options
- *      The custom options
- *
- * @retrun {Object}
- *      Default values merged
- *      with custom values
- */
-exports.mergeWithDefaults = function (options) {
-    var defaults = this.getDefaults();
-
-    if (options.hasOwnProperty('isHTML')) {
-        options.isHtml = options.isHTML;
-    }
-
-    if (options.hasOwnProperty('app')) {
-        var package = this.aliases[options.app];
-
-        options.app = package || options.app;
-    }
-
-    for (var key in defaults) {
-
-        if (!options.hasOwnProperty(key)) {
-            options[key] = defaults[key];
-            continue;
+        var defaults = {
+            subject:     null,
+            body:        null,
+            to:          null,
+            cc:          null,
+            bcc:         null,
+            attachments: null,
+            isHtml:      true
         }
 
-        var custom_  = options[key],
-            default_ = defaults[key];
-
-        if (custom_ === null || custom_ === undefined) {
-            options[key] = default_;
-            continue;
-        }
-
-        if (typeof default_ != typeof custom_) {
-
-            if (typeof default_ == 'string') {
-                options[key] = custom_.join('');
-            }
-
-            else if (typeof default_ == 'object') {
-                options[key] = [custom_.toString()];
+        for (var key in defaults) {
+            if (options[key] !== undefined) {
+                defaults[key] = options[key];
             }
         }
+
+        cordova.exec(null, null, 'EmailComposer', 'open', [options]);
+    },
+
+    /**
+     * Alias für `open()`.
+     */
+    openDraft: function () {
+        this.open.apply(this, arguments);
+    },
+
+    /**
+     * Gibt an, ob Emails versendet werden können.
+     *
+     * @param {Function} callback
+     * @param {Object?}  scope (default: window)
+     */
+    isServiceAvailable: function (callback, scope) {
+        var callbackFn = function () {
+            callback.apply(scope || window, arguments);
+        };
+
+        cordova.exec(callbackFn, null, 'EmailComposer', 'isServiceAvailable', []);
     }
 
-    return options;
 };
 
-/**
- * @private
- *
- * Creates a callback, which will be executed
- * within a specific scope.
- *
- * @param {Function} callbackFn
- *      The callback function
- * @param {Object} scope
- *      The scope for the function
- *
- * @return {Function}
- *      The new callback function
- */
-exports.createCallbackFn = function (callbackFn, scope) {
-    if (typeof callbackFn != 'function')
-        return;
+var plugin = new EmailComposer();
 
-    return function () {
-        callbackFn.apply(scope || this, arguments);
-    };
-};
+module.exports = plugin;

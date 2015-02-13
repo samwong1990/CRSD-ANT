@@ -38,7 +38,7 @@ namespace Cordova.Extension.Commands
         /// <summary>
         /// Überprüft, ob Emails versendet werden können.
         /// </summary>
-        public void isAvailable(string jsonArgs)
+        public void isServiceAvailable(string jsonArgs)
         {
             DispatchCommandResult(new PluginResult(PluginResult.Status.OK, true));
         }
@@ -52,9 +52,9 @@ namespace Cordova.Extension.Commands
             Options options        = JsonHelper.Deserialize<Options>(args[0]);
             EmailComposeTask draft = GetDraftWithProperties(options);
 
-            DispatchCommandResult(new PluginResult(PluginResult.Status.OK, true));
-
             OpenDraft(draft);
+
+            DispatchCommandResult();
         }
 
         /// </summary>
@@ -103,7 +103,10 @@ namespace Cordova.Extension.Commands
         /// </summary>
         private void SetTo(string[] recipients, EmailComposeTask draft)
         {
-            draft.To = string.Join(",", recipients);
+            if (recipients != null)
+            {
+                draft.To = string.Join(",", recipients);
+            }
         }
 
         /// </summary>
@@ -111,7 +114,10 @@ namespace Cordova.Extension.Commands
         /// </summary>
         private void SetCc(string[] recipients, EmailComposeTask draft)
         {
-            draft.Cc = string.Join(",", recipients);
+            if (recipients != null)
+            {
+                draft.Cc = string.Join(",", recipients);
+            }
         }
 
         /// </summary>
@@ -119,7 +125,10 @@ namespace Cordova.Extension.Commands
         /// </summary>
         private void SetBcc(string[] recipients, EmailComposeTask draft)
         {
-            draft.Bcc = string.Join(",", recipients);
+            if (recipients != null)
+            {
+                draft.Bcc = string.Join(",", recipients);
+            }
         }
 
         /// </summary>
@@ -127,7 +136,7 @@ namespace Cordova.Extension.Commands
         /// </summary>
         private void SetAttachments(string[] attachments, EmailComposeTask draft)
         {
-            // Not supported on WP8.0 and WP8.1 Silverlight
+            // Not yet supported :(
         }
     }
 }

@@ -1,16 +1,4 @@
 ## ChangeLog
-#### Version 0.8.2 (not yet released)
-- Added new namespace `cordova.plugins.email`<br>
-  **Note:** The former `plugin.email` namespace is now deprecated and will be removed with the next major release.
-- [___change:___] Unified `absolute:` and `relative:` to `file:`
-- [___change:___] Renamed `isServiceAvailable` to `isAvailable`
-- [feature:] `app:` allows to specify target mail app on Android
-- [feature:] `res:` prefix for native ressource attachments
-- [enhancement:] Support attachments on Windows Phone 8.1
-- [enhancement:] `open` supports callbacks
-- [enhancement:] `isHTML` can be used next `isHtml`
-- [bugfix:] Defaults were ignored
-
 #### Version 0.8.1 (06.04.2014)
 - [enhancement:] Make use Cordovas NSData+Base64 extension.
 - [enhancement:] Log error message if attachment path does not exist.
@@ -19,7 +7,7 @@
 - [bugfix:] `relative://` attachment path wasnt working due to a missing permission.
 - [bugfix:] `base64://` attachment path looked up in the wrong directory.
 - [enhancement:] `relative://` supports now any file types and not only images.
-- [___change:___] `relative://` URI's even for Android need a file extension.
+- [***change***:] `relative://` URI's even for Android need a file extension.
 
 #### Version 0.8.0 (02.03.2014)
 - [enhancement:] New `absolute://` and `relative://` attachment prefixes.
@@ -33,8 +21,8 @@
 
 #### Version 0.7.0 (05.12.2013)
 - Release under the Apache 2.0 license.
-- [___change:___] Removed the `callback` property from the `open` interface.
-- [___change:___] Renamed the properties `recipients`, `ccRecipients`, `bccRecipients`.
+- [***change:***] Removed the `callback` property from the `open` interface.
+- [***change:***] Renamed the properties `recipients`, `ccRecipients`, `bccRecipients`.
 - [bugfix:] Plugin under WP8 throws an error, if recipients were given as arrays.
 - [enhancement:] `open` does not block the ui thread on iOS & Android anymore.
 

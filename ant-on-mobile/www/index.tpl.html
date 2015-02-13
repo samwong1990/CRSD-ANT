@@ -2,6 +2,8 @@
 <html manifest="ant.manifest">
 <head>
     <title>ANT</title>
+    <script src="cordova.js"></script>
+    <script src="cordova_plugins.js"></script>
     <!-- include: "type": "css", "files": "css/**/*.css" -->
     <!-- include: "ordering": "top-down", "type": "js", "files": "js/**/*.js" -->
 </head>
@@ -14,6 +16,8 @@
         <div id="content">
             <div id="formInput" class="instructionsPage">
                 <h1>Attention Network Test</h1>
+                <h1>Email Data</h1>
+                <button onclick="emailTrial();">Click here if you want to get the trial data via email</button>
 
                 <p>You can try the test by clicking next. Optionally, you can fill in the form below.</p>
                 <p>These information will appear in the csv file at the end.</p>
@@ -296,6 +300,8 @@
                 <center>
                     <h1>Save Data</h1>
                     <button onclick="saveTrial(setupData, resultsData); this.disabled=true; this.textContent='Saved';">Click here if you want to save the results</button>
+                    <h1>Email Data</h1>
+                    <button onclick="emailTrial();">Click here if you want to get the trial data via email</button>
                     <h3>Follow these instructions to save your test data.</h3>
                     <br />
 
