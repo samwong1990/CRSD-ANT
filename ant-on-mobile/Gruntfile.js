@@ -16,18 +16,19 @@ module.exports = function (grunt) {
             },
             myTarget: {
                 files: {
-                    'www/index.html': 'www/index.tpl.html'
+                    'www/index.html': 'www/index.tpl.html',
+                    'www/settings.html': 'www/settings.tpl.html'
                 }
             }
         },
         watch: {
             scripts: {
-                files: ['www/elm/*.elm', 'www/js/**/*.js', 'www/css/**/*.css', 'www/index.tpl.html'],
+                files: ['www/elm/*.elm', 'www/js/**/*.js', 'www/css/**/*.css', 'www/index.tpl.html', 'www/settings.tpl.html'],
                 tasks: ['shell:compileElm', 'includeSource', 'shell:runCordovaBrowser'],
                 options: {
                     spawn: false,
                     interrupt: true,
-                    debounceDelay: 250
+                    debounceDelay: 100
                 }
             }
         },
@@ -46,12 +47,18 @@ module.exports = function (grunt) {
                 options: {
                     async: true
                 }
+            },
+            bowerInstall: {
+                command: 'bower install',
+                options: {
+                    async: true
+                }
             }
 
         }
     });
 
     // Default task(s).
-    grunt.registerTask('default', ['includeSource', 'shell:runTestServer', 'shell:runCordovaBrowser', 'watch']);
+    grunt.registerTask('default', ['shell:bowerInstall', 'includeSource', 'shell:runTestServer', 'shell:runCordovaBrowser', 'watch']);
 
 };

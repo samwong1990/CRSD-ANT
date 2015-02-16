@@ -90,3 +90,6 @@ node_modules
 .lock-wscript
 
 ant-on-mobile/www/index.html
+ant-on-mobile/www/settings.html
+ant-on-mobile/www/lib/
+
