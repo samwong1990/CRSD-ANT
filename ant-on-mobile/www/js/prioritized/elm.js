@@ -23,7 +23,8 @@ Elm.Adapter.make = function (_elm) {
       state) {
          return _U.eq(input,
          "L") ? "sendLeftKeyDown" : _U.eq(input,
-         "R") ? "sendRightKeyDown" : "What should I do!?";
+         "R") ? "sendRightKeyDown" : _U.eq(input,
+         "Skip") ? "sendEscKeyDown" : "What should I do!?";
       });
       return A3($Signal.foldp,
       update,
@@ -62,7 +63,7 @@ Elm.Basics.make = function (_elm) {
               _v0._0,
               _v0._1);}
          _U.badCase($moduleName,
-         "on line 458, column 19 to 24");
+         "on line 460, column 19 to 24");
       }();
    });
    var curry = F3(function (f,
@@ -80,7 +81,7 @@ Elm.Basics.make = function (_elm) {
          switch (_v4.ctor)
          {case "_Tuple2": return _v4._1;}
          _U.badCase($moduleName,
-         "on line 442, column 13 to 14");
+         "on line 444, column 13 to 14");
       }();
    };
    var fst = function (_v8) {
@@ -88,7 +89,7 @@ Elm.Basics.make = function (_elm) {
          switch (_v8.ctor)
          {case "_Tuple2": return _v8._0;}
          _U.badCase($moduleName,
-         "on line 438, column 13 to 14");
+         "on line 440, column 13 to 14");
       }();
    };
    var always = F2(function (a,
@@ -246,7 +247,6 @@ Elm.List.make = function (_elm) {
    var append = $Native$List.append;
    var any = $Native$List.any;
    var all = $Native$List.all;
-   var reverse = $Native$List.reverse;
    var length = $Native$List.length;
    var filter = $Native$List.filter;
    var scanl1 = $Native$List.scanl1;
@@ -324,6 +324,11 @@ Elm.List.make = function (_elm) {
       _L.fromArray([]),
       xs);
    });
+   var reverse = A2(foldl,
+   F2(function (x,y) {
+      return A2(_op["::"],x,y);
+   }),
+   _L.fromArray([]));
    var partition = F2(function (pred,
    list) {
       return function () {
@@ -338,7 +343,7 @@ Elm.List.make = function (_elm) {
                                                   ,_0: _v3._0
                                                   ,_1: A2(_op["::"],x,_v3._1)};}
                _U.badCase($moduleName,
-               "between lines 270 and 272");
+               "between lines 271 and 273");
             }();
          });
          return A3(foldr,
@@ -365,10 +370,10 @@ Elm.List.make = function (_elm) {
                                  _v7._1,
                                  _v8._1)};}
                        _U.badCase($moduleName,
-                       "on line 308, column 12 to 28");
+                       "on line 309, column 12 to 28");
                     }();}
                _U.badCase($moduleName,
-               "on line 308, column 12 to 28");
+               "on line 309, column 12 to 28");
             }();
          });
          return A3(foldr,
@@ -401,7 +406,7 @@ Elm.List.make = function (_elm) {
             case "[]":
             return _L.fromArray([]);}
          _U.badCase($moduleName,
-         "between lines 319 and 330");
+         "between lines 320 and 331");
       }();
    });
    _elm.List.values = {_op: _op
@@ -688,16 +693,6 @@ Elm.Native.List.make = function(elm) {
         return v.ctor === '[]' ? throwError('tail') : v._1;
     }
 
-    function last(xs) {
-        if (xs.ctor === '[]') { throwError('last'); }
-        var out = xs._0;
-        while (xs.ctor !== '[]') {
-            out = xs._0;
-            xs = xs._1;
-        }
-        return out;
-    }
-
     function map(f, xs) {
         var arr = [];
         while (xs.ctor !== '[]') {
@@ -779,10 +774,6 @@ Elm.Native.List.make = function(elm) {
             xs = xs._1;
         }
         return false;
-    }
-
-    function reverse(xs) {
-        return fromArray(toArray(xs).reverse());
     }
 
     function append(xs, ys) {
@@ -889,10 +880,6 @@ Elm.Native.List.make = function(elm) {
         }));
     }
 
-    function nth(xs, n) {
-        return toArray(xs)[n];
-    }
-
     function take(n, xs) {
         var arr = [];
         while (xs.ctor !== '[]' && n > 0) {
@@ -933,7 +920,6 @@ Elm.Native.List.make = function(elm) {
 
         head:head,
         tail:tail,
-        last:last,
 
         map:F2(map),
         foldl:F3(foldl),
@@ -946,7 +932,6 @@ Elm.Native.List.make = function(elm) {
         filter:F2(filter),
         length:length,
         member:F2(member),
-        reverse:reverse,
 
         all:F2(all),
         any:F2(any),
@@ -957,7 +942,6 @@ Elm.Native.List.make = function(elm) {
         sort:sort,
         sortBy:F2(sortBy),
         sortWith:F2(sortWith),
-        nth:F2(nth),
         take:F2(take),
         drop:F2(drop),
         repeat:F2(repeat)
@@ -986,7 +970,7 @@ Elm.Native.Ports.make = function(localRuntime) {
             Signal = Elm.Signal.make(localRuntime);
         }
         return function(signal) {
-            var subscribers = [];
+            var subscribers = []
             function subscribe(handler) {
                 subscribers.push(handler);
             }
@@ -1077,8 +1061,6 @@ if (!Elm.fullscreen) {
             var tag = container.tagName;
             if (tag !== 'DIV') {
                 throw new Error('Elm.node must be given a DIV, not a ' + tag + '.');
-            } else if (container.hasChildNodes()) {
-                throw new Error('Elm.node must be given an empty DIV. No children allowed!');
             }
             return init(Display.COMPONENT, container, module, ports || {});
         };
@@ -1092,28 +1074,15 @@ if (!Elm.fullscreen) {
             var inputs = [];
 
             /* OFFSET
-             * Elm's time traveling debugger lets you interrupt the smooth flow of time
-             * by pausing and continuing program execution. To ensure the user sees a
-             * program that moves smoothly through the pause/continue time gap,
-             * we need to adjsut the value of Date.now().
+             * Elm's time traveling debugger lets you pause time. This means
+             * "now" may be shifted a bit into the past. By wrapping Date.now()
+             * we can manage this.
              */
-            var timer = function() {
-                var inducedDelay = 0;
-
-                var now = function() {
-                    return Date.now() - inducedDelay;
-                };
-
-                var addDelay = function(d) {
-                    inducedDelay += d;
-                    return inducedDelay;
-                };
-
-                return {
-                    now : now,
-                    addDelay : addDelay
+            var timer = {
+                now: function() {
+                    return Date.now();
                 }
-            }();
+            };
 
             var updateInProgress = false;
             function notify(id, v) {
@@ -1146,7 +1115,7 @@ if (!Elm.fullscreen) {
                 listeners.push(listener);
             }
 
-            var portUses = {};
+            var portUses = {}
             for (var key in ports) {
                 portUses[key] = 0;
             }
@@ -1184,22 +1153,14 @@ if (!Elm.fullscreen) {
             try {
                 Module = module.make(elm);
                 checkPorts(elm);
-            } catch(e) {
-                var code = document.createElement('code');
-
-                var lines = e.message.split('\n');
-                code.appendChild(document.createTextNode(lines[0]));
-                code.appendChild(document.createElement('br'));
-                code.appendChild(document.createElement('br'));
-                for (var i = 1; i < lines.length; ++i) {
-                    code.appendChild(document.createTextNode('\u00A0 \u00A0 ' + lines[i]));
-                    code.appendChild(document.createElement('br'));
+            }
+            catch (error) {
+                if (typeof container.appendChild == 'undefined') {
+                    console.log(error.message);
+                } else {
+                    container.appendChild(errorNode(error.message));
                 }
-                code.appendChild(document.createElement('br'));
-                code.appendChild(document.createTextNode("Open the developer console for more details."));
-
-                container.appendChild(code);
-                throw e;
+                throw error;
             }
             inputs = filterDeadInputs(inputs);
             filterListeners(inputs, listeners);
@@ -1221,11 +1182,12 @@ if (!Elm.fullscreen) {
                 ports:elm.ports.outgoing,
                 dispose:dispose
             };
-        }
+        };
+
         function checkPorts(elm) {
             var portUses = elm.ports.uses;
             for (var key in portUses) {
-                var uses = portUses[key];
+                var uses = portUses[key]
                 if (uses === 0) {
                     throw new Error(
                         "Initialization Error: provided port '" + key +
@@ -1238,6 +1200,22 @@ if (!Elm.fullscreen) {
                         "Remove declarations until there is exactly one.");
                 }
             }
+        }
+
+        function errorNode(message) {
+            var code = document.createElement('code');
+
+            var lines = message.split('\n');
+            code.appendChild(document.createTextNode(lines[0]));
+            code.appendChild(document.createElement('br'));
+            code.appendChild(document.createElement('br'));
+            for (var i = 1; i < lines.length; ++i) {
+                code.appendChild(document.createTextNode('\u00A0 \u00A0 ' + lines[i]));
+                code.appendChild(document.createElement('br'));
+            }
+            code.appendChild(document.createElement('br'));
+            code.appendChild(document.createTextNode("Open the developer console for more details."));
+            return code;
         }
 
 
@@ -1356,9 +1334,26 @@ if (!Elm.fullscreen) {
             }
             var initialScene = signalGraph.value;
 
+            // Figure out what the render functions should be
+            var render;
+            var update;
+            if (initialScene.props) {
+                var Element = Elm.Native.Graphics.Element.make(elm);
+                render = Element.render;
+                update = Element.updateAndReplace;
+            } else {
+                var VirtualDom = Elm.Native.VirtualDom.make(elm);
+                render = VirtualDom.render;
+                update = VirtualDom.updateAndReplace;
+            }
+
             // Add the initialScene to the DOM
-            var Element = Elm.Native.Graphics.Element.make(elm);
-            elm.node.appendChild(Element.render(initialScene));
+            var container = elm.node;
+            var node = render(initialScene);
+            while (container.firstChild) {
+                container.removeChild(container.firstChild);
+            }
+            container.appendChild(node);
 
             var _requestAnimationFrame =
                 typeof requestAnimationFrame !== 'undefined'
@@ -1438,7 +1433,7 @@ if (!Elm.fullscreen) {
             }
 
             function draw() {
-                Element.updateAndReplace(elm.node.firstChild, savedScene, scheduledScene);
+                update(elm.node.firstChild, savedScene, scheduledScene);
                 if (elm.Native.Window) {
                     elm.Native.Window.values.resizeIfNeeded();
                 }
@@ -1622,7 +1617,10 @@ Elm.Native.Show = {};
 Elm.Native.Show.make = function(elm) {
     elm.Native = elm.Native || {};
     elm.Native.Show = elm.Native.Show || {};
-    if (elm.Native.Show.values) return elm.Native.Show.values;
+    if (elm.Native.Show.values)
+    {
+        return elm.Native.Show.values;
+    }
 
     var _Array;
     var Dict;
@@ -1642,10 +1640,10 @@ Elm.Native.Show.make = function(elm) {
             return v + "";
         }
         else if ((v instanceof String) && v.isChar) {
-            return "'" + addSlashes(v) + "'";
+            return "'" + addSlashes(v, true) + "'";
         }
         else if (type === "string") {
-            return '"' + addSlashes(v) + '"';
+            return '"' + addSlashes(v, false) + '"';
         }
         else if (type === "object" && '_' in v && probablyPublic(v)) {
             var output = [];
@@ -1723,15 +1721,18 @@ Elm.Native.Show.make = function(elm) {
         return "<internal structure>";
     };
 
-    function addSlashes(str) {
-        return str.replace(/\\/g, '\\\\')
+    function addSlashes(str, isChar) {
+        var s = str.replace(/\\/g, '\\\\')
                   .replace(/\n/g, '\\n')
                   .replace(/\t/g, '\\t')
                   .replace(/\r/g, '\\r')
                   .replace(/\v/g, '\\v')
-                  .replace(/\0/g, '\\0')
-                  .replace(/\'/g, "\\'")
-                  .replace(/\"/g, '\\"');
+                  .replace(/\0/g, '\\0');
+        if (isChar) {
+            return s.replace(/\'/g, "\\'")
+        } else {
+            return s.replace(/\"/g, '\\"');
+        }
     }
 
     function probablyPublic(v) {
@@ -2016,7 +2017,7 @@ Elm.Native.Utils.make = function(localRuntime) {
     }
 
     function eq(l,r) {
-        var stack = [{'x': l, 'y': r}];
+        var stack = [{'x': l, 'y': r}]
         while (stack.length > 0) {
             var front = stack.pop();
             var x = front.x;
@@ -2039,7 +2040,7 @@ Elm.Native.Utils.make = function(localRuntime) {
                 }
                 if (c !== Object.keys(y).length) {
                     return false;
-                }
+                };
             } else if (typeof x === 'function') {
                 throw new Error('Equality error: general function equality is ' +
                                 'undecidable, and therefore, unsupported');
@@ -2105,13 +2106,13 @@ Elm.Native.Utils.make = function(localRuntime) {
     }
 
     function chr(c) {
-        var x = String(c);
+        var x = new String(c);
         x.isChar = true;
         return x;
     }
 
     function txt(str) {
-        var t = String(str);
+        var t = new String(str);
         t.text = true;
         return t;
     }
@@ -2332,7 +2333,7 @@ Elm.Result.make = function (_elm) {
             case "Ok":
             return $Maybe.Just(result._0);}
          _U.badCase($moduleName,
-         "between lines 110 and 123");
+         "between lines 158 and 171");
       }();
    };
    var Err = function (a) {
@@ -2347,22 +2348,175 @@ Elm.Result.make = function (_elm) {
             case "Ok":
             return callback(result._0);}
          _U.badCase($moduleName,
-         "between lines 72 and 91");
+         "between lines 120 and 139");
       }();
    });
    var Ok = function (a) {
       return {ctor: "Ok",_0: a};
    };
-   var map = F2(function (f,
-   result) {
+   var map = F2(function (func,
+   ra) {
       return function () {
-         switch (result.ctor)
-         {case "Err":
-            return Err(result._0);
+         switch (ra.ctor)
+         {case "Err": return Err(ra._0);
             case "Ok":
-            return Ok(f(result._0));}
+            return Ok(func(ra._0));}
          _U.badCase($moduleName,
-         "between lines 32 and 69");
+         "between lines 35 and 46");
+      }();
+   });
+   var map2 = F3(function (func,
+   ra,
+   rb) {
+      return function () {
+         var _v9 = {ctor: "_Tuple2"
+                   ,_0: ra
+                   ,_1: rb};
+         switch (_v9.ctor)
+         {case "_Tuple2":
+            switch (_v9._0.ctor)
+              {case "Err":
+                 return Err(_v9._0._0);
+                 case "Ok": switch (_v9._1.ctor)
+                   {case "Ok": return Ok(A2(func,
+                        _v9._0._0,
+                        _v9._1._0));}
+                   break;}
+              switch (_v9._1.ctor)
+              {case "Err":
+                 return Err(_v9._1._0);}
+              break;}
+         _U.badCase($moduleName,
+         "between lines 49 and 52");
+      }();
+   });
+   var map3 = F4(function (func,
+   ra,
+   rb,
+   rc) {
+      return function () {
+         var _v16 = {ctor: "_Tuple3"
+                    ,_0: ra
+                    ,_1: rb
+                    ,_2: rc};
+         switch (_v16.ctor)
+         {case "_Tuple3":
+            switch (_v16._0.ctor)
+              {case "Err":
+                 return Err(_v16._0._0);
+                 case "Ok": switch (_v16._1.ctor)
+                   {case "Ok":
+                      switch (_v16._2.ctor)
+                        {case "Ok": return Ok(A3(func,
+                             _v16._0._0,
+                             _v16._1._0,
+                             _v16._2._0));}
+                        break;}
+                   break;}
+              switch (_v16._1.ctor)
+              {case "Err":
+                 return Err(_v16._1._0);}
+              switch (_v16._2.ctor)
+              {case "Err":
+                 return Err(_v16._2._0);}
+              break;}
+         _U.badCase($moduleName,
+         "between lines 57 and 61");
+      }();
+   });
+   var map4 = F5(function (func,
+   ra,
+   rb,
+   rc,
+   rd) {
+      return function () {
+         var _v26 = {ctor: "_Tuple4"
+                    ,_0: ra
+                    ,_1: rb
+                    ,_2: rc
+                    ,_3: rd};
+         switch (_v26.ctor)
+         {case "_Tuple4":
+            switch (_v26._0.ctor)
+              {case "Err":
+                 return Err(_v26._0._0);
+                 case "Ok": switch (_v26._1.ctor)
+                   {case "Ok":
+                      switch (_v26._2.ctor)
+                        {case "Ok":
+                           switch (_v26._3.ctor)
+                             {case "Ok": return Ok(A4(func,
+                                  _v26._0._0,
+                                  _v26._1._0,
+                                  _v26._2._0,
+                                  _v26._3._0));}
+                             break;}
+                        break;}
+                   break;}
+              switch (_v26._1.ctor)
+              {case "Err":
+                 return Err(_v26._1._0);}
+              switch (_v26._2.ctor)
+              {case "Err":
+                 return Err(_v26._2._0);}
+              switch (_v26._3.ctor)
+              {case "Err":
+                 return Err(_v26._3._0);}
+              break;}
+         _U.badCase($moduleName,
+         "between lines 66 and 71");
+      }();
+   });
+   var map5 = F6(function (func,
+   ra,
+   rb,
+   rc,
+   rd,
+   re) {
+      return function () {
+         var _v39 = {ctor: "_Tuple5"
+                    ,_0: ra
+                    ,_1: rb
+                    ,_2: rc
+                    ,_3: rd
+                    ,_4: re};
+         switch (_v39.ctor)
+         {case "_Tuple5":
+            switch (_v39._0.ctor)
+              {case "Err":
+                 return Err(_v39._0._0);
+                 case "Ok": switch (_v39._1.ctor)
+                   {case "Ok":
+                      switch (_v39._2.ctor)
+                        {case "Ok":
+                           switch (_v39._3.ctor)
+                             {case "Ok":
+                                switch (_v39._4.ctor)
+                                  {case "Ok": return Ok(A5(func,
+                                       _v39._0._0,
+                                       _v39._1._0,
+                                       _v39._2._0,
+                                       _v39._3._0,
+                                       _v39._4._0));}
+                                  break;}
+                             break;}
+                        break;}
+                   break;}
+              switch (_v39._1.ctor)
+              {case "Err":
+                 return Err(_v39._1._0);}
+              switch (_v39._2.ctor)
+              {case "Err":
+                 return Err(_v39._2._0);}
+              switch (_v39._3.ctor)
+              {case "Err":
+                 return Err(_v39._3._0);}
+              switch (_v39._4.ctor)
+              {case "Err":
+                 return Err(_v39._4._0);}
+              break;}
+         _U.badCase($moduleName,
+         "between lines 76 and 117");
       }();
    });
    var formatError = F2(function (f,
@@ -2374,7 +2528,7 @@ Elm.Result.make = function (_elm) {
             case "Ok":
             return Ok(result._0);}
          _U.badCase($moduleName,
-         "between lines 94 and 107");
+         "between lines 142 and 155");
       }();
    });
    var fromMaybe = F2(function (err,
@@ -2386,13 +2540,17 @@ Elm.Result.make = function (_elm) {
             case "Nothing":
             return Err(err);}
          _U.badCase($moduleName,
-         "between lines 126 and 128");
+         "between lines 174 and 176");
       }();
    });
    _elm.Result.values = {_op: _op
                         ,Ok: Ok
                         ,Err: Err
                         ,map: map
+                        ,map2: map2
+                        ,map3: map3
+                        ,map4: map4
+                        ,map5: map5
                         ,andThen: andThen
                         ,formatError: formatError
                         ,toMaybe: toMaybe

@@ -9,6 +9,7 @@ triggers : Signal String
 triggers =
     let update input state = if | input == "L" -> "sendLeftKeyDown"
                                 | input == "R" -> "sendRightKeyDown"
+                                | input == "Skip" -> "sendEscKeyDown"
                                 | otherwise -> "What should I do!?"
     in  foldp update "" input
 

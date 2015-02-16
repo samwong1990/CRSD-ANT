@@ -16,9 +16,6 @@
         <div id="content">
             <div id="formInput" class="instructionsPage">
                 <h1>Attention Network Test</h1>
-                <h1>Email Data</h1>
-                <button onclick="emailTrial();">Click here if you want to get the trial data via email</button>
-
                 <p>You can try the test by clicking next. Optionally, you can fill in the form below.</p>
                 <p>These information will appear in the csv file at the end.</p>
 
@@ -76,6 +73,7 @@
                     </select>
                     <br />
                 </form>
+                <button onclick="emailTrial();">Click here to get the trial data via email</button>
                 <button class="previousButton" onclick="document.form.reset();">Clear</button>
                 <button class="nextButton" onclick="submitForm();">Next</button>
     <!--            <input id="nextButton" class="nextButton" type="button" name="next" value="Next" onclick="submitForm();" />-->
@@ -295,6 +293,9 @@
                     <div id="practiceFeedbackUP" class="practiceFeedback"></div>
                     <div id="practiceFeedbackDOWN" class="practiceFeedback"></div>
                 </div>
+                <button class="cancelButton softkey" onclick="console.log('Skip');adapter.ports.input.send('Skip');">
+                    Skip
+                </button>
             </div>
             <div id="exportPage" class="instructionsPage" style="visibility:hidden">
                 <center>
@@ -337,7 +338,6 @@
                 </center>
             </div>
         </div>
-
         <button class="rightButton softkey" style="visibility: hidden" onclick="adapter.ports.input.send('R')">
             <img src="images/targets/ArrowRight.png" class="target arrow_on_softkey" />
         </button>
