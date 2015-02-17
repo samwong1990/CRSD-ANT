@@ -54,16 +54,28 @@ function submitForm() {
 }
 
 function pushView(viewID) {
-	if (viewStack.length > 0)
-		viewStack[viewStack.length - 1].style.visibility = "hidden";
+	if (viewStack.length > 0) {
+        viewStack[viewStack.length - 1].style.visibility = "hidden";
+        $(viewStack[viewStack.length - 1]).removeClass('show');
+        viewStack[viewStack.length - 1].className += viewStack[viewStack.length - 1].className ? ' hidden' : 'hidden';
+    }
 	view = document.getElementById(viewID);
 	view.style.visibility = "visible";
+    view.className += view.className ? ' show' : 'show';
+    $(view).removeClass('hidden');
 	viewStack.push(view);
 }
 
 function popView() {
-	viewStack.pop().style.visibility = "hidden";
-	viewStack[viewStack.length - 1].style.visibility = "visible";
+    var lastview = viewStack.pop();
+	lastview.style.visibility = "hidden";
+    $(lastview).removeClass('show');
+    lastview.className += lastview.className ? ' hidden' : 'hidden';
+
+    viewStack[viewStack.length - 1].style.visibility = "visible";
+    $(viewStack[viewStack.length - 1]).removeClass('hidden');
+    viewStack[viewStack.length - 1].className += viewStack[viewStack.length - 1].className ? ' show' : 'show';
+
 }
 
 function areYouReady() {
@@ -86,6 +98,8 @@ function testCallback(block, data) {
 		startTest(testBlock, trialSet());
 	} else {
 		popView();
+        // record trial automatically.
+        saveTrial(setupData, resultsData);
 		pushView('exportPage');
 		generateExportLink(resultsData);
 		testBlock = 0;

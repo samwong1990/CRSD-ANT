@@ -22,6 +22,7 @@
     left:   10%;
     width:  80%;
     height: 5%;
+    font-size: 2em;
 }
 
 .softkey {
@@ -32,16 +33,26 @@
     max-height: 100%;
 }
 
-.instructionsPage {
-    background-color: white !important;
-    border: 0 !important;
-    text-align: center;
-}
-
 button {
     font-size: 1.5em;
 }
 
 .previousButton {
     right: 100px !important;
+}
+
+body{
+    font-size: 30.5vw
+}
+
+.instructionsPage p{
+    font-size: 2em;
+}
+
+.instructionsPage h1{
+    font-size: 3em;
+}
+
+.practiceFeedback {
+    font-size: 2em;
 }

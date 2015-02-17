@@ -35,6 +35,9 @@ module.exports = function (grunt) {
         shell: {
             compileElm: {
                 command: 'cd www && elm-make elm/*.elm --output=js/prioritized/elm.js',
+                options: {
+                    async: false
+                }
             },
             runTestServer: {                                // Task
                 command: 'npm test',
@@ -51,7 +54,7 @@ module.exports = function (grunt) {
             bowerInstall: {
                 command: 'bower install',
                 options: {
-                    async: true
+                    async: false
                 }
             }
 
@@ -59,6 +62,6 @@ module.exports = function (grunt) {
     });
 
     // Default task(s).
-    grunt.registerTask('default', ['shell:bowerInstall', 'includeSource', 'shell:runTestServer', 'shell:runCordovaBrowser', 'watch']);
+    grunt.registerTask('default', ['shell:bowerInstall', 'includeSource', 'shell:runCordovaBrowser', 'shell:runTestServer', 'watch']);
 
 };
