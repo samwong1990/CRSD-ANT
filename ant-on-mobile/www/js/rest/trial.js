@@ -9,6 +9,7 @@ var trialStartTime;
 //blockNumber is the current phase of te test.  It will be 0 for the practice phase and then 1 and 2 for the actual test
 //inputTrialSet is expected to contain the trials, order doesn't matter (it's randomized internally).  Each trial is run exactly once.  If you need duplicates of trials, they MUST be in here multiple times.
 function startTest(blockNumber, inputTrialSet) {
+    console.log("starttest");
 	document.onkeydown = earlyEnd;			//Set the early interrupt
 	currentBlock = blockNumber;				//Keep track of the current block
 	currentTrial = 0;						//The current data set uses 32 trials/test 
@@ -16,9 +17,9 @@ function startTest(blockNumber, inputTrialSet) {
 	trialResults = [];						//We'll keep our results in this array
 	practiceFeedbackUP = document.getElementById('practiceFeedbackUP');
 	practiceFeedbackDOWN = document.getElementById('practiceFeedbackDOWN');
-	
+
 	//Setup the test in random order
-	for (trialIndex=currentTrial; trialIndex<(trialCount+currentTrial); trialIndex++) {
+	for (trialIndex=currentTrial; trialIndex<dataSource.getNumberOfTests(); trialIndex++) {
 		sourceTrial = randomNumber(0,(inputTrialSet.length-1));		//Get a random trial
 		trialResults[trialIndex] = inputTrialSet[sourceTrial];	//Set up the results to contain the trial info
 		inputTrialSet.splice(sourceTrial,1);							//Remove the current trial from the pool, so we don't get it again
@@ -128,13 +129,16 @@ function stage4Interrupted(e) {
 
 //Inter-trial Fixation
 function stage5() {
+    console.log("currentTrial=" + currentTrial + ", trialLength=" + dataSource.getNumberOfTests());
 	popView();							//Show the fixation again
 	nowDate = new Date().getTime();		//Get the date for use in the timeout
-	if (currentTrial<(trialCount-1)){	//If we're not on the last trial, we loop
+	if (currentTrial<(dataSource.getNumberOfTests()-1)){	//If we're not on the last trial, we loop
+        console.log("case 0");
 		currentTrial++;					//Increment the number for the next round
 		currentTimer = setTimeout('startTrial()', 3500-(nowDate-trialResults[currentTrial-1][10].getTime()));
 		//We set up the timer to use the time delta from the beginning, rather than adding up the stage 1 and 4 times above.  This keeps everything ever-so-slightly more accurate throughout multiple trials
 	} else {
+        console.log("case 1");
 		//If we are done, let's wrap it up
 		currentTimer = setTimeout('endTest()', 3500-(nowDate-trialResults[currentTrial][10].getTime()));
 	}
@@ -168,5 +172,6 @@ function earlyEnd(e) {
 
 //Finale
 function endTest() {
-	testCallback(currentBlock,trialResults);		//That's it!  Let's move on to the results.
+    console.log("endtest");
+    testCallback(currentBlock,trialResults);		//That's it!  Let's move on to the results.
 }

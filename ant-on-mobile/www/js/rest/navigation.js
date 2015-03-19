@@ -21,7 +21,8 @@ var viewStack = [];
 var setupData = [];
 var resultsData = [];
 var testBlock = 0;
-var numberOfTestBlocks = 4;
+
+var dataSource = {};
 
 function getInputData() {
 	id = document.getElementById('ID').value;
@@ -36,9 +37,18 @@ function getInputData() {
 	groupID = document.getElementById('groupID').value;
 	targetType = document.getElementById('targetType').value;
 	monitorSize = document.getElementById('monitorSize').value;
+    var numberOfTests = document.getElementById('numberOfTests').value;
+    var numberOfQuestions = document.getElementById('numberOfQuestions').value;
+    dataSource.getNumberOfTests = function(){
+        return numberOfTests;
+    };
+    dataSource.getNumberOfQuestions = function(){
+        return numberOfQuestions;
+    };
 	ppi = calculatePPI();
 	setupData = [id, age, gender, sessionNumber, studyID, groupID, targetType, new Date(), 'endDate', monitorSize, ppi];
 	setupDisplay();
+    document.getElementById("numberOfTestBlocks").innerHTML = dataSource.getNumberOfTests();
 }
 
 function calculatePPI() {
@@ -88,15 +98,21 @@ function areYouReady() {
 }
 
 function testCallback(block, data) {
+    console.log(" dataSource.getNumberOfTests()=" + dataSource.getNumberOfTests() + "testCallback testBlock=" + testBlock);
 	resultsData[block] = data;
 	document.getElementById('practiceFeedbackUP').style.visibility='hidden';
 	document.getElementById('practiceFeedbackDOWN').style.visibility='hidden';
-	if (testBlock < numberOfTestBlocks) {
+	if (testBlock < dataSource.getNumberOfTests()) {
+        console.log("testCallback case 0");
 		testBlock++;
-		if (testBlock%2)
-			alert('Are you ready to start Test#' + (testBlock+1)/2 + '?');
+        console.log("testBlock="+testBlock+", testBlock%2="+(testBlock%2));
+		if (testBlock>0){ // Cheap trick to avoid prompting for practice round
+            console.log("testCallback case 1");
+            alert('Are you ready to start Test#' + testBlock + '?');
+        }
 		startTest(testBlock, trialSet());
 	} else {
+        console.log("case 2");
 		popView();
         // record trial automatically.
         saveTrial(setupData, resultsData);

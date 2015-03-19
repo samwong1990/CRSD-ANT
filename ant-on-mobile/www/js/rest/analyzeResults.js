@@ -23,7 +23,7 @@ function generateSummary(userInfo, results) {
 			allResults = results[1].concat(results[2]);
 			if (results[3]) {
 				allResults = results[1].concat(results[2]).concat(results[3]);
-				if (results[3])
+				if (results[4])
 					allResults = results[1].concat(results[2]).concat(results[3]).concat(results[4]);
 			}
 		}
